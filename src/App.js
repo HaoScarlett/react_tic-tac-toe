@@ -17,6 +17,9 @@ export function Square({ value, onSquareClick }) {
 }
 
 export default function Board() {
+  // keep track of X
+  const [xIsNext, setXIsNext] = useState(true);
+
   // create a state variable 'squares' and an update function
   // the initial value of squares: an arr of 9 null
   // 🔸 squares is an arr that will hold the values of 9 squares
@@ -24,10 +27,17 @@ export default function Board() {
   const [squares, setSquares] = useState(Array(9).fill(null));
 
   function handleClick(i) {
+    // check if the square if empty
+    if (squares[i]) {
+      return;
+    }
+
     // create a copy of squares
+    // 🔸 not changing the underlying data directly -- Immutability
     const nextSquares = squares.slice();
-    nextSquares[i] = "X";
+    xIsNext ? (nextSquares[i] = "X") : (nextSquares[i] = "O");
     setSquares(nextSquares);
+    setXIsNext(!xIsNext);
   }
 
   return (
