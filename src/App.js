@@ -16,14 +16,11 @@ export function Square({ value, onSquareClick }) {
   );
 }
 
-export function Board() {
-  const [xIsNext, setXIsNext] = useState(true);
-
+export function Board({ xIsNext, squares, onPlay }) {
   // create a state variable 'squares' and an update function
   // the initial value of squares: an arr of 9 null
   // 🔸 squares is an arr that will hold the values of 9 squares
   // initially, all squares are empty(null)
-  const [squares, setSquares] = useState(Array(9).fill(null));
 
   function handleClick(i) {
     if (squares[i] || calculateWinner(squares)) {
@@ -31,8 +28,7 @@ export function Board() {
     }
     const nextSquares = squares.slice(); // create a new copy after every move
     xIsNext ? (nextSquares[i] = "X") : (nextSquares[i] = "O");
-    setSquares(nextSquares);
-    setXIsNext(!xIsNext);
+    onPlay(nextSquares);
   }
 
   // inform the players
@@ -72,6 +68,11 @@ export default function Game() {
   const [xIsNext, setXIsNext] = useState(true);
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+  }
 
   return (
     <div className="game">
